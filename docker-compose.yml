@@ -4,8 +4,12 @@ services:
     build: .
     image: netflame/airflow
     container_name: airflow
+    command: ['worker', 'flower']
+    expose:
+      - 8793
     ports:
       - '8080:8080'
+      - '5555:5555'
     networks:
       - airflow
       - netflame
@@ -16,9 +20,9 @@ services:
     env_file: 
       - .env
     depends_on:
-      - db
+      - mysql
 
-  db:
+  mysql:
     image: mysql
     container_name: mysql
     command: --default-authentication-plugin=mysql_native_password
@@ -41,10 +45,10 @@ networks:
     driver: bridge
     attachable: true
   netflame:
-    name: netflame-net
+    name: netflame-net        # see https://github.com/netflame/init
     external: true
   wwatch:
-    name: wwatch-net
+    name: wwatch-net          # # see https://github.com/netflame/wwatch
     external: true
 
 volumes:

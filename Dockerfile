@@ -3,7 +3,7 @@ FROM python:3.6.7-alpine3.8
 LABEL maintainer=ilpan:<pna.dev@outlook.com>
 
 ENV AIRFLOW_GPL_UNIDECODE=yes
-ARG extra_pages="mysql,password"
+ARG extra_packages="celery,redis,mysql,password"
 
 RUN apk update \
     && apk add --no-cache \
@@ -19,7 +19,7 @@ RUN apk update \
     && pip install -U --no-cache-dir pip \
     && pip install --no-cache-dir cython numpy
 
-RUN pip install --no-cache-dir apache-airflow[${extra_pages}] \
+RUN pip install --no-cache-dir apache-airflow[${extra_packages}] \
     && apk del .build-deps \
     && pip uninstall -y cython
 
