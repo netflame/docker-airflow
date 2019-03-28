@@ -7,6 +7,7 @@ ARG extra_packages="celery,redis,mysql,password"
 
 RUN apk update \
     && apk add --no-cache \
+        curl \
         libstdc++ \
         mariadb-dev \
     && apk add --no-cache --virtual .build-deps \
