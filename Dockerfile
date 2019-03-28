@@ -3,7 +3,7 @@ FROM python:3.6.7-alpine3.8
 LABEL maintainer=ilpan:<pna.dev@outlook.com>
 
 ENV AIRFLOW_GPL_UNIDECODE=yes
-ARG extra_packages="celery,redis,mysql,password"
+ARG extra_packages="celery,mysql,password"
 
 RUN apk update \
     && apk add --no-cache \
@@ -18,7 +18,7 @@ RUN apk update \
         libxslt-dev \
         linux-headers \
     && pip install -U --no-cache-dir pip \
-    && pip install --no-cache-dir cython numpy
+    && pip install --no-cache-dir cython numpy redis
 
 RUN pip install --no-cache-dir apache-airflow[${extra_packages}] \
     && apk del .build-deps \
@@ -28,7 +28,7 @@ RUN pip install --no-cache-dir apache-airflow[${extra_packages}] \
 ENV AIRFLOW_HOME=/airflow
 ENV AIRFLOW__CORE__DAGS_FOLDER=${AIRFLOW_HOME}/dags \
     AIRFLOW__CORE__BASE_LOG_FLODER=${AIRFLOW_HOME}/logs \
-    AURFLOW__CORE__DEFAULT_TIMEZONE=utc \
+    AIRFLOW__CORE__DEFAULT_TIMEZONE=utc \
     AIRFLOW__CORE__EXECUTOR=SequentialExecutor \
     AIRFLOW__CORE__SQL_ALCHEMY_CONN=sqlite:////${AIRFLOW_HOME}/airflow.db \
     AIRFLOW__CORE__LOAD_EXAMPLES=False \
