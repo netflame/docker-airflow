@@ -1,0 +1,52 @@
+version: '3.7'
+services:
+  airflow:
+    build: .
+    image: netflame/airflow
+    container_name: airflow
+    ports:
+      - '8080:8080'
+    networks:
+      - airflow
+      - netflame
+      - wwatch
+    volumes:
+      - ./dags:${AIRFLOW__CORE__DAGS_FOLDER:-/airflow/dags}
+      - ./bin:${AIRFLOW_HOME:-/airflow}/bin
+    env_file: 
+      - .env
+    depends_on:
+      - db
+
+  db:
+    image: mysql
+    container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - '3306:3306'
+    networks:
+      - airflow
+    volumes:
+      - mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: airflow
+      MYSQL_USER: airflow
+      MYSQL_PASSWORD: airflow
+
+networks:
+  airflow:
+    name: airflow-net
+    driver: bridge
+    attachable: true
+  netflame:
+    name: netflame-net
+    external: true
+  wwatch:
+    name: wwatch-net
+    external: true
+
+volumes:
+  mysql:
+    name: mysql-data

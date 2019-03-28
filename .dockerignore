@@ -1,0 +1,5 @@
+.env
+.gitignore
+bin/
+dags/
+docker-compose.yml
