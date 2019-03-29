@@ -7,7 +7,7 @@ airflow resetdb -y \
 nohup airflow webserver >> out/webserver.out &
 nohup airflow scheduler >> out/scheduler.out &
 
-if (( $# -ge 1 )); then
+if [ $# -ge 1 ]; then
     for subcmd in $@
     do
         flag=0
