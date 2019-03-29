@@ -3,11 +3,11 @@
 airflow resetdb -y \
     && airflow initdb \
     && python create_user.py \
-    && touch webserver.out scheduler.out
-nohup airflow webserver >> webserver.out &
-nohup airflow scheduler >> scheduler.out &
+    && mkdir -p out && touch out/webserver.out out/scheduler.out
+nohup airflow webserver >> out/webserver.out &
+nohup airflow scheduler >> out/scheduler.out &
 
-if (( $# >= 1 )); then
+if (( $# -ge 1 )); then
     for subcmd in $@
     do
         flag=0
@@ -22,9 +22,9 @@ if (( $# >= 1 )); then
             ;;
         esac
         if [ $flag == 1 ]; then
-            nohup airflow $subcmd >> ${subcmd}.out &
+            nohup airflow $subcmd >> out/${subcmd}.out &
         fi
     done
 fi
 
-tail -f webserver.out scheduler.out
+tail -f out/*

@@ -16,7 +16,7 @@ function help() {
     echo ""
 }
 
-if [ $# == 0 ]; then
+if [ $# -eq 0 ]; then
     help
     exit 1
 fi
