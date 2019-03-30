@@ -1,0 +1,4 @@
+# questions
+
+airflow 使用 env 的时候，airflow.cfg 相应的参数中并没有变化？
+airflow celery flower 在 env 中配置没有起作用？（前缀，密码）
